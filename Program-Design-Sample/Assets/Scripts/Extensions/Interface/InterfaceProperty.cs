@@ -1,13 +1,16 @@
 using System;
 using UnityEngine;
 using AnnulusGames.LucidTools.Inspector;
+using Interface;
+using UniRx;
 using UnityEngine.Serialization;
 
 [Serializable]
 public class InterfaceProperty<T>
 {
-    [SerializeField,Required,OnValueChanged("OnSetField")] private Component field;
-
+    [SerializeField,Required]
+    private Component field;
+    
     public T Value
     {
         get
@@ -20,15 +23,8 @@ public class InterfaceProperty<T>
         }
     }
 
-    private void OnSetField(Component component)
+    public void SetField(Component component)
     {
-        if (component is T) return;
-        if (component.TryGetComponent(out T value))
-        {
-            field = value as Component;
-            return;
-        }
-
-        field = null;
+        field = component;
     }
 }
